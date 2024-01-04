@@ -1,0 +1,77 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.game-wrapper{
+    position: relative;
+    width: 900px;
+    height: 600px;
+    background-color: lightblue;
+    overflow: hidden;
+}
+
+.ground1{
+    position: absolute;
+    bottom: 0;
+    left:0;
+    height: 150px;
+    width: 110%;
+    z-index: 2;
+}
+.ground2{
+    position: absolute;
+    bottom: 0;
+    left:900px;
+    height: 150px;
+    width: 110%;
+    z-index: 2;
+}
+.ninja{
+    width: 100px;
+    position: absolute;
+    bottom: 130px;
+    z-index: 1;
+    border:1px solid black
+}
+.cloud{
+    position: absolute;
+    width: 730px;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -30%);
+    z-index: 0;
+}
+.hearts-wrapper{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 5px;
+    height: 30px;
+}
+.zombie{
+    transform: rotateY(180deg);
+    width: 110px;
+    position: absolute;
+    bottom: 130px;
+    right: -150px;
+    z-index: 1;
+    border:1px solid black
+}
+.shuriken{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    z-index: 1;
+    /* transform: rotate(30deg); */
+}
