@@ -1,7 +1,11 @@
 import gameVariable from "../constants/constants.js";
 import { runAnimation } from "./animations.js";
-import { createGround } from "./createGameElements.js";
-const { ground, ninja } = gameVariable;
+import {
+  createGround,
+  createHealthBar,
+  createZombie,
+} from "./createGameElements.js";
+const { ground, ninja, zombie } = gameVariable;
 
 const groundMove = (steps, ground) => {
   for (let i = 0; i < steps; i++) {
@@ -23,6 +27,7 @@ ground.forEach((element) => {
 
 const zombieWalk = (zombie) => {
   zombie.style.right = parseInt(zombie.style.right) + 3 + "px";
+
   if (
     parseInt(zombie.style.right) > 570 &&
     parseInt(zombie.style.right) < 670 &&
@@ -42,16 +47,34 @@ const zombieWalk = (zombie) => {
       }, i * 300);
     }
   }
+  if (gameVariable.currentZombieHealth <= 0) {
+    // console.log(zombie);
+    // document
+    //   .querySelector(".game-wrapper")
+    //   .removeChild(document.querySelector(".health-bar-wrapper"));
+    // document.querySelector(".game-wrapper").removeChild(zombie);
+    // const image = createZombie();
+    // document.querySelector(".game-wrapper").appendChild(image);
+    // zombieWalk(image);
+    // createHealthBar(image);
+    // runAnimation("zombie/walk/Walk", 1, image, "zombie");
+    // gameVariable.zombieTouch = false;
+    // gameVariable.zombie = image;
+    // gameVariable.currentZombieHealth = 100;
+    console.log(gameVariable);
+  }
   if (zombie.style.right === "951px") {
+    document
+      .querySelector(".game-wrapper")
+      .removeChild(document.querySelector(".health-bar-wrapper"));
     document.querySelector(".game-wrapper").removeChild(zombie);
-    const image = document.createElement("img");
-    image.src = "./images/zombie/walk/Walk1.png";
-    image.classList.add("zombie");
-    image.style.right = "-150px";
+    const image = createZombie();
     document.querySelector(".game-wrapper").appendChild(image);
     zombieWalk(image);
+    createHealthBar(image);
     runAnimation("zombie/walk/Walk", 1, image, "zombie");
     gameVariable.zombieTouch = false;
+    gameVariable.zombie = image;
   } else {
     setTimeout(() => {
       zombieWalk(zombie);

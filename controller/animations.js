@@ -1,5 +1,9 @@
 import gameVariable from "../constants/constants.js";
-const { ninja, shuriken } = gameVariable;
+import { createHealthBar, createZombie } from "./createGameElements.js";
+import { zombieWalk } from "./move.js";
+const { ninja } = gameVariable;
+const shurikenOverlay = document.querySelector(".shuriken-overlay");
+shurikenOverlay.style.height = "0%";
 
 const jumpAnimation = (image) => {
   for (let a = 0; a < 10; a++) {
@@ -54,22 +58,56 @@ const ninjaJump = (image) => {
 
 const shurikenSpin = (shuriken) => {
   let deg = 0;
-  setInterval(() => {
+  const shurikenSpinInterval = setInterval(() => {
     shuriken.style.transform = `rotate(${deg}deg)`;
-    deg += 2;
+    deg += 3;
     shuriken.style.right = parseInt(shuriken.style.right) - 4 + "px";
+    if (
+      parseInt(shuriken.style.right) >=
+        parseInt(gameVariable.zombie.style.right) &&
+      parseInt(shuriken.style.right) <=
+        parseInt(gameVariable.zombie.style.right) + 50 &&
+      parseInt(shuriken.style.bottom) >= 130 &&
+      parseInt(shuriken.style.bottom) <= 260
+    ) {
+      clearInterval(shurikenSpinInterval);
+      document.querySelector(".game-wrapper").removeChild(shuriken);
+      gameVariable.currentZombieHealth -= gameVariable.hitDamage;
+      document.querySelector(".health-bar").style.width =
+        parseInt(document.querySelector(".health-bar").style.width) -
+        gameVariable.hitDamage +
+        "%";
+    }
+    if (parseInt(shuriken.style.right) === -100) {
+      clearInterval(shurikenSpinInterval);
+      document.querySelector(".game-wrapper").removeChild(shuriken);
+    }
   }, 0.5);
 };
 
-window.addEventListener("keypress", (event) => {
-  if (event.key === " " && gameVariable.allowJump) {
-    gameVariable.allowJump = false;
-    gameVariable.triggerJump = true;
-    ninjaJump(ninja);
-    setTimeout(() => {
-      jumpAnimation(ninja);
-    }, 100);
-  }
-});
+const shurikenLoadingAnimation = () => {
+  const loadingAnimation = setInterval(() => {
+    shurikenOverlay.style.height =
+      parseFloat(shurikenOverlay.style.height) + 0.5 + "%";
+    if (parseFloat(shurikenOverlay.style.height) === 100) {
+      gameVariable.shurikenCount++;
+      document.querySelector(".shuriken-counter").innerHTML =
+        gameVariable.shurikenCount;
+      clearInterval(loadingAnimation);
+      setTimeout(() => {
+        shurikenOverlay.style.height = "0%";
+        if (gameVariable.shurikenCount < 5) {
+          shurikenLoadingAnimation();
+        }
+      }, 700);
+    }
+  }, 10);
+};
 
-export { runAnimation, shurikenSpin };
+export {
+  runAnimation,
+  shurikenSpin,
+  ninjaJump,
+  jumpAnimation,
+  shurikenLoadingAnimation,
+};
