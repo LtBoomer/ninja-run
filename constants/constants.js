@@ -9,10 +9,10 @@ const gameVariable = {
   zombieCount: 0,
   allowJump: true,
   hearts: 3,
-  hitDamage: 50,
+  hitDamage: 10,
   currentZombieHealth: 100,
   gameOn: true,
-  zombieKillTarget: 2,
+  zombieKillTarget: 10,
   groundMoveCondition: true,
 };
 

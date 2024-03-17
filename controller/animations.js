@@ -58,6 +58,7 @@ const shurikenSpin = (shuriken) => {
     shuriken.style.transform = `rotate(${deg}deg)`;
     deg += 3;
     shuriken.style.right = parseInt(shuriken.style.right) - 4 + "px";
+
     if (
       parseInt(shuriken.style.right) >=
         parseInt(gameVariable.zombie.style.right) &&
@@ -69,19 +70,24 @@ const shurikenSpin = (shuriken) => {
       clearInterval(shurikenSpinInterval);
       document.querySelector(".game-wrapper").removeChild(shuriken);
       gameVariable.currentZombieHealth -= gameVariable.hitDamage;
-      document.querySelector(".health-bar").style.width =
-        parseInt(document.querySelector(".health-bar").style.width) -
-        gameVariable.hitDamage +
-        "%";
+      if (document.querySelector(".health-bar")) {
+        document.querySelector(".health-bar").style.width =
+          parseInt(document.querySelector(".health-bar").style.width) -
+          gameVariable.hitDamage +
+          "%";
+      }
     }
     if (parseInt(shuriken.style.right) === -100) {
       clearInterval(shurikenSpinInterval);
-      document.querySelector(".game-wrapper").removeChild(shuriken);
     }
   }, 0.5);
 };
 
 const shurikenLoadingAnimation = () => {
+  if (document.querySelector(".shuriken-counter")) {
+    document.querySelector(".shuriken-counter").innerHTML =
+      gameVariable.shurikenCount;
+  }
   if (
     gameVariable.hearts !== 0 &&
     gameVariable.gameOn &&
@@ -89,31 +95,27 @@ const shurikenLoadingAnimation = () => {
   ) {
     const shurikenOverlay = document.querySelector(".shuriken-overlay");
     shurikenOverlay.style.height = "0%";
-    console.log(gameVariable);
-    const loadingAnimation = setInterval(() => {
-      if (gameVariable.gameOn) {
+    for (let i = 0; i < 200; i++) {
+      setTimeout(() => {
         shurikenOverlay.style.height =
           parseFloat(shurikenOverlay.style.height) + 0.5 + "%";
-
-        if (
-          parseFloat(shurikenOverlay.style.height) >= 100 &&
-          gameVariable.hearts !== 0
-        ) {
-          gameVariable.shurikenCount++;
-
+      }, i * 8);
+    }
+    setTimeout(() => {
+      if (gameVariable.hearts !== 0) {
+        gameVariable.shurikenCount++;
+        if (document.querySelector(".shuriken-counter")) {
           document.querySelector(".shuriken-counter").innerHTML =
             gameVariable.shurikenCount;
-
-          clearInterval(loadingAnimation);
-          setTimeout(() => {
-            shurikenOverlay.style.height = "0%";
-            if (gameVariable.shurikenCount < 5) {
-              shurikenLoadingAnimation();
-            }
-          }, 500);
         }
+        setTimeout(() => {
+          shurikenOverlay.style.height = "0%";
+          if (gameVariable.shurikenCount < 5) {
+            shurikenLoadingAnimation();
+          }
+        }, 500);
       }
-    }, 8);
+    }, 1700);
   }
 };
 
@@ -130,7 +132,7 @@ const winAnimation = () => {
     gameVariable.groundMoveCondition = false;
     ninja.style.visibility = "hidden";
     const standingNinja = document.createElement("img");
-    standingNinja.src = "./images/ninja/attack/Attack__002.png";
+    standingNinja.src = "./images/ninja-win.png";
     standingNinja.classList.add("ninja");
     standingNinja.classList.add("standing-ninja");
     standingNinja.style.width = "150px";

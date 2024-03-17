@@ -30,7 +30,6 @@ const zombieWalk = (zombie) => {
       clearInterval(walk);
       return;
     }
-
     if (
       parseInt(zombie.style.right) > 570 &&
       parseInt(zombie.style.right) < 670 &&

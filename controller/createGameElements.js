@@ -59,9 +59,7 @@ const createCounterIcons = () => {
     }
     const counter = document.createElement("span");
     counter.classList.add(`${index ? "zombie" : "shuriken"}-counter`);
-    counter.innerHTML = index
-      ? gameVariable.zombieCount
-      : gameVariable.shurikenCount;
+    counter.innerHTML = 0;
     wrapper.appendChild(image);
     wrapper.appendChild(counter);
     document.querySelector(".game-wrapper").appendChild(wrapper);

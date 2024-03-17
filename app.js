@@ -1,3 +1,5 @@
+import gameVariable from "./constants/constants.js";
+import { zombieWalk } from "./controller/move.js";
 import {
   runAnimation,
   jumpAnimation,
@@ -5,8 +7,6 @@ import {
   shurikenLoadingAnimation,
   winAnimation,
 } from "./controller/animations.js";
-import gameVariable from "./constants/constants.js";
-import { groundMove, zombieWalk } from "./controller/move.js";
 import {
   createHearts,
   createShuriken,
@@ -26,9 +26,14 @@ window.addEventListener("keypress", (event) => {
       shurikenLoadingAnimation();
     }
     gameVariable.shurikenCount--;
-    document.querySelector(".shuriken-counter").innerHTML =
-      gameVariable.shurikenCount;
+    if (document.querySelector(".shuriken-counter")) {
+      document.querySelector(".shuriken-counter").innerHTML =
+        gameVariable.shurikenCount;
+    }
     createShuriken();
+  }
+  if (event.key === "z") {
+    gameVariable.hitDamage = 100;
   }
 });
 
@@ -48,10 +53,10 @@ window.addEventListener("keypress", (event) => {
     }, 100);
   }
 });
+
 const win = () => {
   const winCondition = setInterval(() => {
     if (gameVariable.zombieCount === zombieKillTarget) {
-      console.log(gameVariable);
       createCastleWin();
       winAnimation();
       const hearts = document.querySelector(".hearts-wrapper");
@@ -92,9 +97,8 @@ document.querySelectorAll(".play-again-button").forEach((item, index) => {
       document
         .querySelector(".game-wrapper")
         .removeChild(document.querySelector(".standing-ninja"));
-      document
-        .querySelector(".game-wrapper")
-        .removeChild(document.querySelector(".bubble"));
+      document.querySelector(".bubble").style.display = "none";
+      document.querySelector(".bubble").innerHTML = "";
       document
         .querySelector(".game-wrapper")
         .removeChild(document.querySelector(".win-castle"));
@@ -102,6 +106,7 @@ document.querySelectorAll(".play-again-button").forEach((item, index) => {
     }
 
     createCounterIcons();
+    shurikenLoadingAnimation();
     createHearts();
     zombieWalk(zombie);
     runAnimation("zombie/walk/Walk", 1, zombie, "zombie");
@@ -109,12 +114,21 @@ document.querySelectorAll(".play-again-button").forEach((item, index) => {
   });
 });
 
-win();
-createCounterIcons();
-shurikenLoadingAnimation();
-runAnimation("ninja/run/Run__00", 0, ninja, "ninja");
-runAnimation("zombie/walk/Walk", 1, zombie, "zombie");
-zombieWalk(zombie);
-createHearts();
+runAnimation(
+  "ninja/run/Run__00",
+  0,
+  document.querySelector(".intro-ninja"),
+  "ninja"
+);
 
-createHealthBar(zombie);
+document.querySelector(".start-game").addEventListener("click", () => {
+  document.querySelector(".intro-wrapper").style.display = "none";
+  win();
+  createHearts();
+  createCounterIcons();
+  shurikenLoadingAnimation();
+  runAnimation("ninja/run/Run__00", 0, ninja, "ninja");
+  zombieWalk(zombie);
+  createHealthBar(zombie);
+  runAnimation("zombie/walk/Walk", 1, zombie, "zombie");
+});
